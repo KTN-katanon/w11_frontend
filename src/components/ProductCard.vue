@@ -1,5 +1,6 @@
 <template>
   <q-card class="my-card">
+    <q-img :src="'http://localhost:3000' + product.imageUrl" style="max-width: 50px;"></q-img>
     <q-card-actions>
       <q-btn flat @click="select">Select</q-btn>
     </q-card-actions>

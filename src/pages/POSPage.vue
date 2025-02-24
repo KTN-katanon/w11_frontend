@@ -5,7 +5,7 @@
       <div class="col-6">
         <q-scroll-area style="height: 100%; max-width: 600px">
           <div class="row">
-            <div v-for="p in products" :key="p.id ?? 0" class="col-4">
+            <div v-for="p in productStore.products" :key="p.id ?? 0" class="col-4">
               <ProductCard :product="p" @select="select"></ProductCard>
             </div>
           </div>
@@ -41,14 +41,18 @@
 <script setup lang="ts">
 import ProductCard from 'src/components/ProductCard.vue'
 import type { Product } from 'src/models'
-import { computed, ref } from 'vue'
+import { useProductStore } from 'src/stores/productStore'
+import { computed, onMounted, ref } from 'vue'
 interface ProductItem {
   id: number
   product: Product
   amount: number
 }
+const productStore = useProductStore()
+onMounted(async () => {
+  await productStore.getProducts()
+})
 let lastProductItemId = 1
-const products = ref<Product[]>([])
 const productItems = ref<ProductItem[]>([])
 function select(product: Product) {
   console.log(product)
