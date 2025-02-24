@@ -33,6 +33,7 @@
           </table>
         </q-scroll-area>
         <div class="text-h1">{{ posStore.sumPrice }}</div>
+        <q-btn @click="posStore.addOrder()">Create Order</q-btn>
       </div>
     </div>
   </q-page>
