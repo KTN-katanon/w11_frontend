@@ -75,7 +75,7 @@ onMounted(async () => {
 })
 
 function edit(row: Type) {
-  id.value = row.id
+  id.value = row.id ?? 0
   name.value = row.name
   dialog.value = true
 }
@@ -84,12 +84,10 @@ function save() {
     if (success) {
       if (id.value === 0) {
         await typeStore.addType({
-          id: id.value,
           name: name.value,
         })
       } else {
         await typeStore.updateType({
-          id: id.value,
           name: name.value,
         })
       }

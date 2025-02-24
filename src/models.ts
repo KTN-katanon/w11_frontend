@@ -1,5 +1,5 @@
 export interface Type {
-  id: number;
+  id?: number;
   name: string;
   createdAt?: Date;
   updatedAt?: Date;
