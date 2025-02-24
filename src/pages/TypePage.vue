@@ -5,7 +5,7 @@
     <q-dialog v-model="dialog" persistent>
       <q-card style="min-width: 350px">
         <q-card-section>
-          <div class="text-h6">{{ id === 0 ? 'Add New Product' : 'Edit Product' }}</div>
+          <div class="text-h6">{{ id === 0 ? 'Add New Type' : 'Edit Type' }}</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
@@ -18,18 +18,6 @@
               lazy-rules
               :rules="[(val) => (val && val.length > 0) || 'Please type something']"
             />
-            <q-input
-              filled
-              v-model="price"
-              label="Your price *"
-              hint="price is required"
-              lazy-rules
-              :rules="[(val) => (val && val.length > 0) || 'Please type something']"
-            />
-            <div class="q-gutter-sm">
-              <q-radio v-model="category" val="drink" label="Drink" />
-              <q-radio v-model="category" val="bakery" label="Bakery" />
-            </div>
           </q-form>
         </q-card-section>
 
@@ -39,7 +27,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-table :columns="columns" :rows="productStore.products">
+    <q-table :columns="columns" :rows="typeStore.types">
       <template v-slot:body-cell-operation="{ row }">
         <td class="q-td">
           <q-btn flat icon="edit" @click="edit(row)"></q-btn>
@@ -51,10 +39,10 @@
 </template>
 
 <script setup lang="ts">
-import type { Product } from 'src/models'
+import type { Type } from 'src/models'
 import { onMounted, ref } from 'vue'
 import { type QForm, type QTableColumn } from 'quasar'
-import { useProductStore } from 'src/stores/productStore'
+import { useTypeStore } from 'src/stores/typeStore'
 const dialog = ref(false)
 const form = ref<QForm | null>(null)
 const columns: QTableColumn[] = [
@@ -72,18 +60,6 @@ const columns: QTableColumn[] = [
     align: 'center',
   },
   {
-    name: 'category',
-    label: 'Category',
-    field: 'category',
-    align: 'center',
-  },
-  {
-    name: 'price',
-    label: 'Price',
-    field: 'price',
-    align: 'center',
-  },
-  {
     name: 'operation',
     label: '',
     field: 'operation',
@@ -91,37 +67,30 @@ const columns: QTableColumn[] = [
   },
 ]
 
-const productStore = useProductStore()
+const typeStore = useTypeStore()
 const id = ref(0)
 const name = ref('')
-const category = ref<'drink' | 'bakery'>('drink')
-const price = ref<number>(10)
 onMounted(async () => {
-  await productStore.getProducts() // เรียกใช้งานเป็นฟังก์ชัน
+  await typeStore.getTypes() // เรียกใช้งานเป็นฟังก์ชัน
 })
 
-function edit(row: Product) {
+function edit(row: Type) {
   id.value = row.id
   name.value = row.name
-  category.value = row.category
   dialog.value = true
 }
 function save() {
   form.value?.validate().then(async (success) => {
     if (success) {
       if (id.value === 0) {
-        await productStore.addProduct({
+        await typeStore.addType({
           id: id.value,
           name: name.value,
-          category: category.value,
-          price: price.value,
         })
       } else {
-        await productStore.updateProduct({
+        await typeStore.updateType({
           id: id.value,
           name: name.value,
-          category: category.value,
-          price: price.value,
         })
       }
       dialog.value = false
@@ -133,18 +102,14 @@ function reset() {
   form.value?.resetValidation()
   id.value = 0
   name.value = ''
-  category.value = 'drink'
-  price.value = 0
   dialog.value = false
 }
-function remove(row: Product) {
-  productStore.delProduct(row)
+function remove(row: Type) {
+  typeStore.delType(row)
 }
 function onReset() {
   id.value = 0
   name.value = ''
-  category.value = 'drink'
-  price.value = 0
   dialog.value = false
 }
 </script>
