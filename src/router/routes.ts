@@ -49,6 +49,12 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', name: 'ProductPage', component: () => import('pages/ProductPage.vue') }],
     meta: { requiresAuth: false },
   },
+  {
+    path: '/type-page',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', name: 'TypePage', component: () => import('pages/TypePage.vue') }],
+    meta: { requiresAuth: false },
+  },
   // Always leave this as last one,
   // but you can also remove it
   {
