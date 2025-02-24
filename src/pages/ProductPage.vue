@@ -12,10 +12,10 @@
           <q-form ref="form" class="q-gutter-md">
             <q-input filled v-model="name" label="Name *" hint="Bakery Name" lazy-rules
               :rules="[(val) => (val && val.length > 0) || 'Please type something']" />
-            <q-input filled v-model="price" label="Your price *" hint="price is required" lazy-rules
-              :rules="[(val) => (val && val.length > 0) || 'Please type something']" />
+            <q-input filled v-model.number="price" label="Your price *" hint="price is required" lazy-rules
+              :rules="[(val) => (typeof val === 'number' && !isNaN(val) && val > 0) || 'Please enter & valid price']" />
             <div class="q-gutter-sm">
-              <q-radio v-model="typeId" v-for="t in typeStore.types" :key="t.id ?? 0" :val="t.id??0" :label='t.name' />
+              <q-radio v-model="typeId" v-for="t in typeStore.types" :key="t.id ?? 0" :val="t.id ?? 0" :label='t.name' />
             </div>
             <q-file outlined v-model="file" accept="image/*" label="Upload Image">
               <template v-slot:prepend>
@@ -110,6 +110,7 @@ onMounted(async () => {
 function edit(row: Product) {
   id.value = row.id ?? 0
   name.value = row.name
+  price.value = row.price
   typeId.value = row.typeId
   dialog.value = true
 }

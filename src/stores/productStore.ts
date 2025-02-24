@@ -13,7 +13,7 @@ export const useProductStore = defineStore('product', () => {
       const formData = new FormData()
       formData.append('name', u.name)
       formData.append('price', u.price.toString())
-      formData.append('typeId', u.name.toString())
+      formData.append('typeId', u.typeId.toString())
       if (file) {
         formData.append('file', file)
       }
