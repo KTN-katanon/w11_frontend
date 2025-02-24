@@ -122,16 +122,14 @@ function save() {
           name: name.value,
           typeId: typeId.value,
           price: price.value,
-          imageUrl: '',
-        })
+        }, file.value)
       } else {
         await productStore.updateProduct({
           id: id.value,
           name: name.value,
           typeId: typeId.value,
           price: price.value,
-          imageUrl: '',
-        })
+        }, file.value)
       }
       dialog.value = false
       onReset()

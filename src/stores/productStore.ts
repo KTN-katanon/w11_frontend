@@ -7,10 +7,19 @@ import { ref } from 'vue'
 export const useProductStore = defineStore('product', () => {
   const products = ref<Product[]>([])
 
-  async function addProduct(u: Product) {
+  async function addProduct(u: Product, file: File | null) {
     try {
       Loading.show()
-      const res = await api.post('/products', u)
+      const formData = new FormData()
+      formData.append('name', u.name)
+      formData.append('price', u.price.toString())
+      formData.append('typeId', u.name.toString())
+      if (file) {
+        formData.append('file', file)
+      }
+      const res = await api.post('/products', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
       console.log(res.data)
       await getProducts()
     } catch (err) {
@@ -29,7 +38,7 @@ export const useProductStore = defineStore('product', () => {
   async function delProduct(u: Product) {
     try {
       Loading.show()
-      const res = await api.delete('/products/'+u.id)
+      const res = await api.delete('/products/' + u.id)
       console.log(res.data)
       await getProducts()
     } catch (err) {
@@ -45,10 +54,19 @@ export const useProductStore = defineStore('product', () => {
       Loading.hide()
     }
   }
-  async function updateProduct(u: Product) {
+  async function updateProduct(u: Product, file: File | null) {
     try {
       Loading.show()
-      const res = await api.patch('/products/'+u.id, u)
+      const formData = new FormData()
+      formData.append('name', u.name)
+      formData.append('price', u.price.toString())
+      formData.append('typeId', u.name.toString())
+      if (file) {
+        formData.append('file', file)
+      }
+      const res = await api.patch('/products/' + u.id, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
       console.log(res.data)
       await getProducts()
     } catch (err) {
