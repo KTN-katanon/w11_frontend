@@ -60,12 +60,12 @@ export const useProductStore = defineStore('product', () => {
       const formData = new FormData()
       formData.append('name', u.name)
       formData.append('price', u.price.toString())
-      formData.append('typeId', u.name.toString())
+      formData.append('typeId', u.typeId.toString())
       if (file) {
         formData.append('file', file)
       }
       const res = await api.patch('/products/' + u.id, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: { 'Content-Type': 'multipart/form-data'}
       })
       console.log(res.data)
       await getProducts()
