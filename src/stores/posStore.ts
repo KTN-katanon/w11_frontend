@@ -30,6 +30,31 @@ export const usePosStore = defineStore('Pos', () => {
 
     }
   }
+  async function addOrder() {
+      try {
+        Loading.show()
+        const res = await api.post('/orders', {
+          userId: 1,
+          orderItems: productItems.value.map((item) => {
+            return { productId: item.product.id, qty: item.amount}
+          })
+        })
+        console.log(res.data)
+        //Clear
+        productItems.value = []
+      } catch (err) {
+        console.error(err)
+        Notify.create({
+          color: 'negative',
+          position: 'top',
+          message: 'Add failed',
+          icon: 'report_problem'
+        })
+      } finally {
+        console.log('finally')
+        Loading.hide()
+      }
+    }
   const sumPrice = computed(() => {
     let sum = 0
     for (let i = 0; i < productItems.value.length; i++) {
@@ -40,7 +65,7 @@ export const usePosStore = defineStore('Pos', () => {
   function addItem(p:Product){
     productItems.value.push({product: p, amount: 1})
   }
-  return { products, getProducts, productItems ,addItem, sumPrice}
+  return { products, getProducts, productItems ,addItem, sumPrice, addOrder}
 })
 
 if (import.meta.hot) {
