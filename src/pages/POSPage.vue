@@ -5,7 +5,7 @@
       <div class="col-6">
         <q-scroll-area style="height: 100%; max-width: 600px">
           <div class="row">
-            <div v-for="p in products" :key="p.id" class="col-4">
+            <div v-for="p in products" :key="p.id ?? 0" class="col-4">
               <ProductCard :product="p" @select="select"></ProductCard>
             </div>
           </div>
