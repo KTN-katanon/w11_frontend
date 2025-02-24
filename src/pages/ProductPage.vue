@@ -17,6 +17,11 @@
             <div class="q-gutter-sm">
               <q-radio v-model="typeId" v-for="t in typeStore.types" :key="t.id ?? 0" :val="t.id??0" :label='t.name' />
             </div>
+            <q-file outlined v-model="file" accept="image/*" label="Upload Image">
+              <template v-slot:prepend>
+                <q-icon name="attach-file"></q-icon>
+              </template>
+            </q-file>
           </q-form>
         </q-card-section>
 
@@ -35,7 +40,7 @@
       </template>
       <template v-slot:body-cell-image-url="{ row }">
         <td class="q-td">
-          {{ row.imageUrl }}
+          <q-img :src="'http://localhost:3000' + row.imageUrl" style="max-width: 50px;"></q-img>
         </td>
       </template>
     </q-table>
@@ -96,6 +101,7 @@ const id = ref(0)
 const name = ref('')
 const typeId = ref(1)
 const price = ref<number>(10)
+const file = ref<File | null>(null)
 onMounted(async () => {
   await typeStore.getTypes()
   await productStore.getProducts() // เรียกใช้งานเป็นฟังก์ชัน
@@ -116,6 +122,7 @@ function save() {
           name: name.value,
           typeId: typeId.value,
           price: price.value,
+          imageUrl: '',
         })
       } else {
         await productStore.updateProduct({
@@ -123,6 +130,7 @@ function save() {
           name: name.value,
           typeId: typeId.value,
           price: price.value,
+          imageUrl: '',
         })
       }
       dialog.value = false
