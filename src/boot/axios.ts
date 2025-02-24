@@ -16,15 +16,15 @@ declare module 'vue' {
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({ baseURL: 'http://localhost:3000' });
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve,ms))
-}
+// function sleep(ms: number) {
+//   return new Promise((resolve) => setTimeout(resolve,ms))
+// }
 api.interceptors.request.use((config) => {
   console.log('Request was sent')
   return config
 })
 api.interceptors.response.use(async (response) => {
-  await sleep(2000)
+  // await sleep(2000)
   console.log('Request was received')
   return response
 })
