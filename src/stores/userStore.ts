@@ -7,10 +7,21 @@ import { ref } from 'vue'
 export const useUserStore = defineStore('user', () => {
   const users = ref<User[]>([])
 
-  async function addUser(u: User) {
+  async function addUser(u: User, file: File | null) {
     try {
       Loading.show()
-      const res = await api.post('/users', u)
+      const formData = new FormData()
+      formData.append('login', u.login)
+      formData.append('password', u.password)
+      formData.append('age', u.age.toString())
+      formData.append('gender', u.gender)
+      formData.append('roles', u.roles.toString())
+      if (file) {
+        formData.append('file', file)
+      }
+      const res = await api.post('/users', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
       console.log(res.data)
       await getUsers()
     } catch (err) {
@@ -45,10 +56,21 @@ export const useUserStore = defineStore('user', () => {
       Loading.hide()
     }
   }
-  async function updateUser(u: User) {
+  async function updateUser(u: User, file: File | null) {
     try {
       Loading.show()
-      const res = await api.patch('/users/'+u.id, u)
+      const formData = new FormData()
+      formData.append('login', u.login)
+      formData.append('password', u.password)
+      formData.append('age', u.age.toString())
+      formData.append('gender', u.gender)
+      formData.append('roles', u.roles.toString())
+      if (file) {
+        formData.append('file', file)
+      }
+      const res = await api.post('/users', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
       console.log(res.data)
       await getUsers()
     } catch (err) {

@@ -44,6 +44,11 @@
               <q-radio v-model="gender" val="male" label="Male" />
               <q-radio v-model="gender" val="female" label="Female" />
             </div>
+            <q-file outlined v-model="file" accept="image/*" label="Upload Image">
+              <template v-slot:prepend>
+                <q-icon name="attach-file"></q-icon>
+              </template>
+            </q-file>
           </q-form>
         </q-card-section>
 
@@ -53,6 +58,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
     <q-table :columns="columns" :rows="userStore.users">
       <template v-slot:body-cell-operation="{ row }">
         <td class="q-td">
@@ -60,6 +66,11 @@
           <q-btn flat icon="delete" @click="remove(row)">
             <template #default></template>
           </q-btn>
+        </td>
+      </template>
+      <template v-slot:body-cell-image-url="{ row }">
+        <td class="q-td">
+          <q-img :src="'http://localhost:3000' + row.imageUrl" style="max-width: 50px;"></q-img>
         </td>
       </template>
     </q-table>
@@ -80,6 +91,12 @@ const columns: QTableColumn[] = [
     field: 'id',
     align: 'center',
     sortable: true,
+  },
+  {
+    name: 'image-url',
+    label: 'Image',
+    field: 'imageUrl',
+    align: 'center',
   },
   {
     name: 'login',
@@ -107,6 +124,7 @@ const login = ref('')
 const password = ref('')
 const roles = ref<('admin' | 'user')[]>(['user'])
 const gender = ref<'male' | 'female'>('male')
+const file = ref<File | null>(null)
 const age = ref<number>(10)
 onMounted(async () => {
   await userStore.getUserByEmail
@@ -130,7 +148,7 @@ function save() {
           roles: roles.value,
           gender: gender.value,
           age: age.value,
-        })
+        }, file.value)
       } else {
         await userStore.updateUser({
           id: id.value,
@@ -139,7 +157,7 @@ function save() {
           roles: roles.value,
           gender: gender.value,
           age: age.value,
-        })
+        }, file.value)
       }
       dialog.value = false
       onReset()
