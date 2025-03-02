@@ -5,6 +5,13 @@ export interface Type {
   updatedAt?: Date
   deletedAt?: Date
 }
+export interface Role {
+  id?: number
+  name: string
+  createdAt?: Date
+  updatedAt?: Date
+  deletedAt?: Date
+}
 export interface Product {
   id?: number
   name: string
@@ -15,10 +22,13 @@ export interface Product {
 }
 
 export interface User {
-  id: number
-  login: string
-  password: string
-  roles: ('admin' | 'user')[]
-  gender: 'male' | 'female'
-  age: number
+  id: number;
+  login: string;
+  password: string;
+  roleIds: number[];
+  role?: Role;
+  gender: 'male' | 'female';
+  age: number;
+  imageUrl? : string;
 }
+
