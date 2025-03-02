@@ -28,7 +28,7 @@
         </div>
       </q-form>
       <q-list>
-        <q-item v-for="u in userStore.users" :key="u.id"> {{ u.login }} {{ u.password }}</q-item>
+        <q-item v-for="u in userStore.users" :key="u.id ?? 0"> {{ u.login }} {{ u.password }}</q-item>
       </q-list>
     </div>
   </q-page>

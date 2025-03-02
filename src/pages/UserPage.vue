@@ -10,43 +10,24 @@
 
         <q-card-section class="q-pt-none">
           <q-form ref="form" class="q-gutter-md">
-            <q-input
-              filled
-              v-model="login"
-              label="Your login *"
-              hint="Login with Email"
-              lazy-rules
-              :rules="[(val) => (val && val.length > 0) || 'Please type something']"
-            />
+            <q-input filled v-model="login" label="Your login *" hint="Login with Email" lazy-rules
+              :rules="[(val) => (val && val.length > 0) || 'Please type something']" />
 
-            <q-input
-              filled
-              type="password"
-              v-model="password"
-              label="Your Password"
-              lazy-rules
-              :rules="[(val) => (val !== null && val !== '') || 'Please type your password']"
-            />
-            <q-input
-              filled
-              v-model.number="age"
-              label="Your Age *"
-              hint="Age"
-              lazy-rules
-              type="number"
-              :rules="[(val) => val >= 10 || 'Please type age']"
-            />
-            <div class="q-gutter-sm">
-              <q-checkbox v-model="roles" label="Admin" color="teal" val="admin" />
-              <q-checkbox v-model="roles" label="User" color="orange" val="user" />
-            </div>
+            <q-input filled type="password" v-model="password" label="Your Password" lazy-rules
+              :rules="[(val) => (val !== null && val !== '') || 'Please type your password']" />
+            <q-input filled v-model.number="age" label="Your Age *" hint="Age" lazy-rules type="number"
+              :rules="[(val) => val >= 10 || 'Please type age']" />
             <div class="q-gutter-sm">
               <q-radio v-model="gender" val="male" label="Male" />
               <q-radio v-model="gender" val="female" label="Female" />
             </div>
+            <div class="q-gutter-sm">
+              <q-checkbox v-model="roleId" label="1" color="teal" val="1" />
+              <q-checkbox v-model="roleId" label="2" color="orange" val="2" />
+            </div>
             <q-file outlined v-model="file" accept="image/*" label="Upload Image">
               <template v-slot:prepend>
-                <q-icon name="attach-file"></q-icon>
+                <q-icon name="attach_file" />
               </template>
             </q-file>
           </q-form>
@@ -58,7 +39,6 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-
     <q-table :columns="columns" :rows="userStore.users">
       <template v-slot:body-cell-operation="{ row }">
         <td class="q-td">
@@ -70,7 +50,7 @@
       </template>
       <template v-slot:body-cell-image-url="{ row }">
         <td class="q-td">
-          <q-img :src="'http://localhost:3000' + row.imageUrl" style="max-width: 50px;"></q-img>
+          <q-img :src="'http://localhost:3000' + row.imageUrl" style="max-width: 50px;"> </q-img>
         </td>
       </template>
     </q-table>
@@ -120,12 +100,12 @@ const columns: QTableColumn[] = [
 
 const userStore = useUserStore()
 const id = ref(0)
+const roleId = ref<number[]>([1])
 const login = ref('')
 const password = ref('')
-const roles = ref<('admin' | 'user')[]>(['user'])
 const gender = ref<'male' | 'female'>('male')
-const file = ref<File | null>(null)
 const age = ref<number>(10)
+const file = ref<File | null>(null)
 onMounted(async () => {
   await userStore.getUserByEmail
 })
@@ -134,8 +114,12 @@ function edit(row: User) {
   id.value = row.id
   login.value = row.login
   password.value = row.password
+  gender.value = row.gender
+  age.value = row.age
+  roleId.value = row.roleIds ?? []
   dialog.value = true
 }
+
 
 function save() {
   form.value?.validate().then(async (success) => {
@@ -145,18 +129,18 @@ function save() {
           id: id.value,
           login: login.value,
           password: password.value,
-          roles: roles.value,
           gender: gender.value,
           age: age.value,
+          roleIds: roleId.value
         }, file.value)
       } else {
         await userStore.updateUser({
           id: id.value,
           login: login.value,
           password: password.value,
-          roles: roles.value,
           gender: gender.value,
           age: age.value,
+          roleIds: roleId.value
         }, file.value)
       }
       dialog.value = false

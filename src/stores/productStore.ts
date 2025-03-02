@@ -64,6 +64,7 @@ export const useProductStore = defineStore('product', () => {
       if (file) {
         formData.append('file', file)
       }
+      console.log([...formData.entries()]);
       const res = await api.patch('/products/' + u.id, formData, {
         headers: { 'Content-Type': 'multipart/form-data'}
       })
