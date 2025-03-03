@@ -22,8 +22,8 @@
               <q-radio v-model="gender" val="female" label="Female" />
             </div>
             <div class="q-gutter-sm">
-              <q-checkbox v-model="roleId" label="1" color="teal" val="1" />
-              <q-checkbox v-model="roleId" label="2" color="orange" val="2" />
+              <q-checkbox v-for="role in roleStore.roles" :key="role.id ?? 0" v-model="roleId" :label="role.name"
+                :val="role.id ?? 0" />
             </div>
             <q-file outlined v-model="file" accept="image/*" label="Upload Image">
               <template v-slot:prepend>
@@ -62,6 +62,7 @@ import type { User } from 'src/models'
 import { onMounted, ref } from 'vue'
 import { type QForm, type QTableColumn } from 'quasar'
 import { useUserStore } from 'src/stores/userStore'
+import { useRoleStore } from 'src/stores/rolesStore'
 const dialog = ref(false)
 const form = ref<QForm | null>(null)
 const columns: QTableColumn[] = [
@@ -99,6 +100,7 @@ const columns: QTableColumn[] = [
 ]
 
 const userStore = useUserStore()
+const roleStore = useRoleStore()
 const id = ref(0)
 const roleId = ref<number[]>([1])
 const login = ref('')
@@ -107,6 +109,7 @@ const gender = ref<'male' | 'female'>('male')
 const age = ref<number>(10)
 const file = ref<File | null>(null)
 onMounted(async () => {
+  await roleStore.getRoles()
   await userStore.getUserByEmail
 })
 
