@@ -7,7 +7,7 @@ import { ref } from 'vue'
 export const useUserStore = defineStore('user', () => {
   const users = ref<User[]>([])
 
-  async function addUser(u: User , file: File|null ) {
+  async function addUser(u: User, file: File | null) {
     try {
       Loading.show()
       const formData = new FormData()
@@ -16,11 +16,11 @@ export const useUserStore = defineStore('user', () => {
       formData.append('gender', u.gender)
       formData.append('age', u.age.toString())
       u.roleIds.forEach(id => formData.append('roleIds', id.toString()));
-      if(file){
-        formData.append('file',file)
+      if (file) {
+        formData.append('file', file)
       }
-      const res = await api.post('/users', formData ,{
-        headers: { 'Content-Type' : 'multipart/form-data'}
+      const res = await api.post('/users', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
       })
       console.log(res.data)
       await getUsers()
@@ -40,7 +40,7 @@ export const useUserStore = defineStore('user', () => {
   async function delUser(u: User) {
     try {
       Loading.show()
-      const res = await api.patch('/users/' + u.id)
+      const res = await api.delete(`/users/${u.id}`)
       console.log(res.data)
       await getUsers()
     } catch (err) {
@@ -56,7 +56,8 @@ export const useUserStore = defineStore('user', () => {
       Loading.hide()
     }
   }
-  async function updateUser(u: User , file: File|null) {
+
+  async function updateUser(u: User, file: File | null) {
     try {
       Loading.show()
       const formData = new FormData()
@@ -65,11 +66,11 @@ export const useUserStore = defineStore('user', () => {
       formData.append('gender', u.gender)
       formData.append('age', u.age.toString())
       u.roleIds.forEach(id => formData.append('roleIds', id.toString()));
-      if(file){
-        formData.append('file',file)
+      if (file) {
+        formData.append('file', file)
       }
-      const res = await api.patch('/users/'+u.id, formData, {
-        headers: { 'Content-Type' : 'multipart/form-data'}
+      const res = await api.patch('/users/' + u.id, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
       })
       console.log(res.data)
       await getUsers()
