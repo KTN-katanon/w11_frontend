@@ -32,3 +32,10 @@ export interface User {
   imageUrl? : string;
 }
 
+export interface Order{
+  id: number
+  total: number
+  qty: number
+  user: 1;
+}
+
