@@ -63,6 +63,12 @@ const linksList: EssentialLinkProps[] = [
     icon: 'article',
     link: '/product-page',
   },
+  {
+    title: 'Order',
+    caption: 'Order Page',
+    icon: 'archive',
+    link: '/order-page',
+  },
 ]
 
 const leftDrawerOpen = ref(false)
